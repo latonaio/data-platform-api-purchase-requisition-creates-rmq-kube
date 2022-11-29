@@ -34,7 +34,7 @@ func (c *DPFMAPICaller) AsyncPurchaseRequisitionCreates(
 	input *dpfm_api_input_reader.SDC,
 
 	log *logger.Logger,
-	// msg rabbitmq.RabbitmqMessage,
+
 ) []error {
 	wg := sync.WaitGroup{}
 	mtx := sync.Mutex{}
@@ -56,7 +56,6 @@ func (c *DPFMAPICaller) AsyncPurchaseRequisitionCreates(
 		}
 	}
 
-	// 後処理
 	ticker := time.NewTicker(10 * time.Second)
 	select {
 	case e := <-sqlUpdateFin:
@@ -83,7 +82,6 @@ func (c *DPFMAPICaller) Header(wg *sync.WaitGroup, mtx *sync.Mutex, errFin chan 
 	sessionID := sdc.RuntimeSessionID
 	ctx := context.Background()
 
-	// data_platform_purchase_requisition_header_dataの更新
 	headerData := sdc.PurchaseRequisition
 	res, err := c.rmq.SessionKeepRequest(ctx, c.conf.RMQ.QueueToSQL()[0], map[string]interface{}{"message": headerData, "function": "PurchaseRequisitionHeader", "runtime_session_id": sessionID})
 	if err != nil {
@@ -92,7 +90,7 @@ func (c *DPFMAPICaller) Header(wg *sync.WaitGroup, mtx *sync.Mutex, errFin chan 
 	}
 	res.Success()
 	if !checkResult(res) {
-		// err = xerrors.New("Header Data cannot insert")
+
 		sdc.SQLUpdateResult = getBoolPtr(false)
 		sdc.SQLUpdateError = "Header Data cannot insert"
 		return
@@ -111,7 +109,6 @@ func (c *DPFMAPICaller) Item(wg *sync.WaitGroup, mtx *sync.Mutex, errFin chan er
 	sessionID := sdc.RuntimeSessionID
 	ctx := context.Background()
 
-	// data_platform_purchase_requisition_item_dataの更新
 	itemData := sdc.PurchaseRequisition.Item
 	res, err := c.rmq.SessionKeepRequest(ctx, c.conf.RMQ.QueueToSQL()[0], map[string]interface{}{"message": itemData, "function": "PurchaseRequisitionItem", "runtime_session_id": sessionID})
 	if err != nil {
@@ -120,7 +117,7 @@ func (c *DPFMAPICaller) Item(wg *sync.WaitGroup, mtx *sync.Mutex, errFin chan er
 	}
 	res.Success()
 	if !checkResult(res) {
-		// err = xerrors.New("Item Data cannot insert")
+
 		sdc.SQLUpdateResult = getBoolPtr(false)
 		sdc.SQLUpdateError = "Item Data cannot insert"
 		return
@@ -139,7 +136,6 @@ func (c *DPFMAPICaller) ItemDeliveryAddress(wg *sync.WaitGroup, mtx *sync.Mutex,
 	sessionID := sdc.RuntimeSessionID
 	ctx := context.Background()
 
-	// data_platform_purchase_requisition_item_dataの更新
 	itemDeliveryAddressData := sdc.PurchaseRequisition.Item.ItemDeliveryAddress
 	res, err := c.rmq.SessionKeepRequest(ctx, c.conf.RMQ.QueueToSQL()[0], map[string]interface{}{"message": itemDeliveryAddressData, "function": "PurchaseRequisitionItemDeliveryAddress", "runtime_session_id": sessionID})
 	if err != nil {
@@ -148,9 +144,9 @@ func (c *DPFMAPICaller) ItemDeliveryAddress(wg *sync.WaitGroup, mtx *sync.Mutex,
 	}
 	res.Success()
 	if !checkResult(res) {
-		// err = xerrors.New("Item Data cannot insert")
+
 		sdc.SQLUpdateResult = getBoolPtr(false)
-		sdc.SQLUpdateError = "Item Data cannot insert"
+		sdc.SQLUpdateError = "Item Delivery Address Data cannot insert"
 		return
 	}
 

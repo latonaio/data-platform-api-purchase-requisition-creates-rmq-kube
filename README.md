@@ -64,7 +64,7 @@ func (c *DPFMAPICaller) AsyncPurchaseRequisitionCreates(
 	input *dpfm_api_input_reader.SDC,
 
 	log *logger.Logger,
-	// msg rabbitmq.RabbitmqMessage,
+
 ) []error {
 	wg := sync.WaitGroup{}
 	mtx := sync.Mutex{}
@@ -86,7 +86,6 @@ func (c *DPFMAPICaller) AsyncPurchaseRequisitionCreates(
 		}
 	}
 
-	// 後処理
 	ticker := time.NewTicker(10 * time.Second)
 	select {
 	case e := <-sqlUpdateFin:
@@ -103,7 +102,6 @@ func (c *DPFMAPICaller) AsyncPurchaseRequisitionCreates(
 
 	return nil
 }
-
 ```
 
 ## Output  
