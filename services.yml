@@ -34,8 +34,8 @@ spec:
               value: ""
             - name: "RMQ_SESSION_CONTROL_QUEUE"
               value: "data-platform-api-purchase-requisition-creates-session-control-queue"
-            - name: "DB_NAME"
-              value: "DataPlatformMastersAndTransactionsMysqlKube"
+            - name: "MYSQL_DB_NAME"
+              value: "DataPlatformCommonSettingsMysqlKube"
           envFrom:
             - configMapRef:
                 name: env-config
@@ -57,4 +57,4 @@ spec:
       port: 8080
       protocol: TCP
       targetPort: 8080
-      nodePort: 30778
+      nodePort: 30748
